@@ -88,6 +88,8 @@ namespace DevIO.Api.Controllers
         [HttpPost("imagem")]
         public async Task<ActionResult> AdicionarImagem(IFormFile file)
         {
+            await Task.CompletedTask;
+
             return Ok(file);
         }
 

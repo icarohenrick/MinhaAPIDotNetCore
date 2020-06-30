@@ -41,6 +41,8 @@ namespace DevIO.Api.Configuration
 
             app.UseCors("Development");
 
+            app.UseAuthorization();
+
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
