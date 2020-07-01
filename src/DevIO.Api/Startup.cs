@@ -41,6 +41,7 @@ namespace DevIO.Api
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvcConfiguration();
         }
     }
