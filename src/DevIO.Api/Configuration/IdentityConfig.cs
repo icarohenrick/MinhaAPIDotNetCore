@@ -1,8 +1,11 @@
 ﻿using DevIO.Api.Data;
+using DevIO.Api.Extensions;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.Text;
 
 namespace DevIO.Api.Configuration
 {
@@ -16,7 +19,24 @@ namespace DevIO.Api.Configuration
             services.AddDefaultIdentity<IdentityUser>()
                 .AddRoles<IdentityRole>()
                 .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddErrorDescriber<IdentityMensagensPortugues>()
                 .AddDefaultTokenProviders();
+
+            //JWT
+
+            var appSettingsSections = configuration.GetSection("AppSettings");
+            services.Configure<AppSettings>(appSettingsSections);
+
+            var appsettings = appSettingsSections.Get<AppSettings>();
+            var key = Encoding.ASCII.GetBytes(appsettings.Secret);
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(_ =>
+                _.RequireHttpsMetadata = false
+            );
 
             return services;
         }
