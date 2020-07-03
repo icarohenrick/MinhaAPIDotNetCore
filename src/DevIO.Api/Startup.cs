@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 namespace DevIO.Api
 {
@@ -21,15 +22,16 @@ namespace DevIO.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDbContext<MeuDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
+
             services.AddIdentityConfiguration(Configuration);
 
             services.AddAutoMapper(typeof(Startup));
 
             services.WebApiConfig();
 
-            services.AddDbContext<MeuDbContext>(options =>
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
-
+            services.AddSwaggerGenNewtonsoftSupport();
 
             services.ResolveDependencies();
         }
@@ -40,6 +42,12 @@ namespace DevIO.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/V1/swagger.json", "My API");
+            });
 
             app.UseAuthentication();
             app.UseMvcConfiguration();
