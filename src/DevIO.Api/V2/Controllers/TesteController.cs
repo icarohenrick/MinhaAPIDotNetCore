@@ -18,6 +18,7 @@ namespace DevIO.Api.V2.Controllers
             _notificador = notificador;
         }
 
+        
         [HttpGet]
         public IActionResult Index()
         {

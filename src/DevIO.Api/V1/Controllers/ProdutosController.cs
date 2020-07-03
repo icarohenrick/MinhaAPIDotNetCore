@@ -38,6 +38,7 @@ namespace DevIO.Api.V1.Controllers
             return _mapper.Map<IEnumerable<ProdutoViewModel>>(await _produtoRepository.ObterProdutoFornecedores());
         }
 
+        
         [HttpGet("{id:guid}")]
         public async Task<ActionResult<ProdutoViewModel>> ObterPorId(Guid id)
         {
@@ -48,6 +49,7 @@ namespace DevIO.Api.V1.Controllers
             return produtoViewModel;
         }
 
+        
         [HttpPost]
         public async Task<ActionResult<ProdutoViewModel>> Adicionar(ProdutoViewModel produtoViewModel)
         {
@@ -66,6 +68,7 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(produtoViewModel);
         }
 
+        
         [DisableRequestSizeLimit]
         [HttpPost("adicionar")]
         public async Task<ActionResult<ProdutoViewModel>> AdicionarAlternativo(ProdutoImagemViewModel produtoViewModel)
@@ -83,6 +86,7 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(produtoViewModel);
         }
 
+        
         //[DisableRequestSizeLimit]
         [RequestSizeLimit(40000000)]
         [HttpPost("imagem")]
@@ -93,6 +97,7 @@ namespace DevIO.Api.V1.Controllers
             return Ok(file);
         }
 
+        
         [HttpPut("{id:guid}")]
         public async Task<IActionResult> Atualizar(Guid id, ProdutoViewModel produtoViewModel)
         {
@@ -125,6 +130,7 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(produtoAtualizacao);
         }
 
+        
         [HttpDelete("{id:guid}")]
         public async Task<ActionResult<ProdutoViewModel>> Excluir(Guid id)
         {
@@ -188,7 +194,7 @@ namespace DevIO.Api.V1.Controllers
             return true;
         }
 
-        public async Task<ProdutoViewModel> ObterProduto(Guid id)
+        private async Task<ProdutoViewModel> ObterProduto(Guid id)
         {
             return _mapper.Map<ProdutoViewModel>(await _produtoRepository.ObterProdutoFornecedor(id));
         }

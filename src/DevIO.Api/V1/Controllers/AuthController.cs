@@ -35,7 +35,8 @@ namespace DevIO.Api.V1.Controllers
             _appSettings = appSettings.Value;
         }
 
-        [Route("nova-conta")]
+        
+        [HttpPost("nova-conta")]
         public async Task<ActionResult> Registrar(RegisterUserViewModels registerUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);
@@ -63,7 +64,8 @@ namespace DevIO.Api.V1.Controllers
             return CustomResponse(registerUser);
         }
 
-        [Route("entrar")]
+        
+        [HttpPost("entrar")]
         public async Task<ActionResult> Login(LoginUserViewModels loginUser)
         {
             if (!ModelState.IsValid) return CustomResponse(ModelState);

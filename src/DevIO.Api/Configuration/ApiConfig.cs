@@ -29,11 +29,6 @@ namespace DevIO.Api.Configuration
 
             services.AddControllers();
 
-            services.AddSwaggerGen(swagger =>
-            {
-                swagger.SwaggerDoc("V1", new OpenApiInfo { Title = "My API" });
-            });
-
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
