@@ -12,6 +12,7 @@ using DevIO.Business.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,15 +25,19 @@ namespace DevIO.Api.V1.Controllers
         private readonly SignInManager<IdentityUser> _signInManager;
         private readonly UserManager<IdentityUser> _userManager;
         private readonly AppSettings _appSettings;
+        private readonly ILogger _logger;
+
         public AuthController(SignInManager<IdentityUser> signInManager,
             UserManager<IdentityUser> userManager,
             IOptions<AppSettings> appSettings,
+            ILogger<AuthController> logger,
             INotificador notificador,
             IUser user) : base(notificador, user)
         {
             _signInManager = signInManager;
             _userManager = userManager;
             _appSettings = appSettings.Value;
+            _logger = logger;
         }
 
         
@@ -72,7 +77,11 @@ namespace DevIO.Api.V1.Controllers
 
             var result = await _signInManager.PasswordSignInAsync(loginUser.Email, loginUser.Password, false, true);
 
-            if (result.Succeeded) return CustomResponse(await GerarJwt(loginUser.Email));
+            if (result.Succeeded)
+            {
+                _logger.LogInformation($"Usuário {loginUser.Email} logado com sucesso!");
+                return CustomResponse(await GerarJwt(loginUser.Email));
+            }
 
             if (result.IsLockedOut)
             {
