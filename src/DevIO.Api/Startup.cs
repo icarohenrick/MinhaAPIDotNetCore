@@ -27,11 +27,6 @@ namespace DevIO.Api
         {
             services.AddIdentityConfiguration(Configuration);
 
-            services.AddHealthChecks();
-                //.AddSqlServer(Configuration.GetConnectionString("DefaultConnection"), name: "BancoSql");
-
-            services.AddHealthChecksUI();
-
             services.AddDbContext<MeuDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
@@ -40,6 +35,8 @@ namespace DevIO.Api
             services.WebApiConfig();
 
             services.addSwaggerConfig();
+
+            services.HealthCheckConfig(Configuration);
 
             services.ResolveDependencies();
         }
@@ -56,14 +53,8 @@ namespace DevIO.Api
             app.UseMiddleware<ExceptionMiddleware>();
 
             app.UseMvcConfiguration();
-            app.UseSwaggerConfig(provider);
 
-            app.UseHealthChecks("/api/hc", new HealthCheckOptions()
-            {
-                Predicate = _ => true,
-                ResponseWriter = UIResponseWriter.WriteHealthCheckUIResponse
-            });
-            app.UseHealthChecksUI();
+            app.UseSwaggerConfig(provider);
         }
     }
 }
